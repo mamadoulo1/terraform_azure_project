@@ -18,23 +18,19 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  env = terraform.workspace
+}
+
 resource "azurerm_resource_group" "data_rg" {
-  name     = "rg-datalake-dev"
+  name     = "rg-datalake-${local.env}"
   location = "West Europe"
 }
 
-module "datalake_dev" {
+module "datalake" {
   source = "./modules/datalake"
 
-  storage_account_name = "stdatalakemamaddev"
-  resource_group_name  = azurerm_resource_group.data_rg.name
-  location             = azurerm_resource_group.data_rg.location
-}
-
-module "datalake_prod" {
-  source = "./modules/datalake"
-
-  storage_account_name = "stdatalakemamadprod"
+  storage_account_name = "stdatalakemamad${local.env}"
   resource_group_name  = azurerm_resource_group.data_rg.name
   location             = azurerm_resource_group.data_rg.location
 }
