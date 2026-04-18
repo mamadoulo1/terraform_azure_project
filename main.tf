@@ -19,27 +19,22 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "data_rg" {
-  name     = var.resource_group_name
-  location = var.location
+  name     = "rg-datalake-dev"
+  location = "West Europe"
 }
 
-resource "azurerm_storage_account" "data_lake" {
-  name                     = var.storage_account_name
-  resource_group_name      = azurerm_resource_group.data_rg.name
-  location                 = azurerm_resource_group.data_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  is_hns_enabled           = true
+module "datalake_dev" {
+  source = "./modules/datalake"
+
+  storage_account_name = "stdatalakemamaddev"
+  resource_group_name  = azurerm_resource_group.data_rg.name
+  location             = azurerm_resource_group.data_rg.location
 }
 
-resource "azurerm_storage_container" "raw" {
-  name                  = "raw"
-  storage_account_name  = azurerm_storage_account.data_lake.name
-  container_access_type = "private"
-}
+module "datalake_prod" {
+  source = "./modules/datalake"
 
-resource "azurerm_storage_container" "processed" {
-  name                  = "processed"
-  storage_account_name  = azurerm_storage_account.data_lake.name
-  container_access_type = "private"
+  storage_account_name = "stdatalakemamadprod"
+  resource_group_name  = azurerm_resource_group.data_rg.name
+  location             = azurerm_resource_group.data_rg.location
 }
