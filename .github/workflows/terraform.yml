@@ -37,9 +37,12 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check
 
+      - name: Terraform Select Workspace
+        run: terraform workspace select dev || terraform workspace new dev
+
       - name: Terraform Plan
-        run: terraform plan -workspace=dev
+        run: terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -workspace=dev
+        run: terraform apply -auto-approve
