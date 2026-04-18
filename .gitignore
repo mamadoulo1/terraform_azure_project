@@ -1,0 +1,9 @@
+# Dossier des plugins téléchargés par terraform init
+.terraform/
+
+# State Terraform — contient des données sensibles (clés, IPs...)
+terraform.tfstate
+terraform.tfstate.backup
+
+# Fichier de valeurs des variables — peut contenir des secrets
+*.tfvars
